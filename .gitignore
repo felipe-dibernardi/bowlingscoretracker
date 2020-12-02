@@ -1,0 +1,16 @@
+# Add any directories, files, or patterns you don't want to be tracked by version control
+.git
+target
+*.iml
+.idea
+.mvn
+mvnw
+mvnw.cmd
+.metada
+build
+.classpath
+.project
+.settings
+.svn
+nbactions.xml
+nb-configuration.xml
