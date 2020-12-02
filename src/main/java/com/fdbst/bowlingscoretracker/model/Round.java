@@ -23,6 +23,13 @@ public class Round {
         this.thirdTry = thirdTry;
     }
 
+    public Round(Round source) {
+        this.firstTry = source.firstTry;
+        this.secondTry = source.secondTry;
+        this.thirdTry = source.thirdTry;
+        this.accumulatedScore = source.accumulatedScore;
+    }
+
     public boolean isStrike() {
         return firstTry == 10;
     }

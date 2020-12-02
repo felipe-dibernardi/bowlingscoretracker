@@ -31,7 +31,7 @@ public class BowlingScoreReaderTest {
         player1.getRounds().add(new Round(10, 0));
         player1.getRounds().add(new Round(0, 8));
         player1.getRounds().add(new Round(8, 2));
-        player1.getRounds().add(new Round(0, 6));
+        player1.getRounds().add(new Round(-1, 6));
         player1.getRounds().add(new Round(10, 0));
         player1.getRounds().add(new Round(10, 0));
         player1.getRounds().add(new Round(10, 8, 1));
@@ -53,7 +53,7 @@ public class BowlingScoreReaderTest {
     @Test
     @DisplayName("Read a score with two players")
     public void readScoreTwoPlayers() throws FileNotFoundException, InvalidValueException, InvalidScoreException,
-            NoPlayersException, TooManyRoundsException, NotEnoughRoundsException {
+            InvalidThirdValueException, NoPlayersException, TooManyRoundsException, NotEnoughRoundsException {
         List<Player> players = scoreReader.readScore("src/test/resources/twoPlayers.txt");
 
         assertThat(players).hasSize(2);
@@ -66,7 +66,7 @@ public class BowlingScoreReaderTest {
     @Test
     @DisplayName("Read a score with one player")
     public void readScoreOnePlayer() throws FileNotFoundException, InvalidValueException, InvalidScoreException,
-            NoPlayersException, TooManyRoundsException, NotEnoughRoundsException {
+            InvalidThirdValueException, NoPlayersException, TooManyRoundsException, NotEnoughRoundsException {
         List<Player> players = scoreReader.readScore("src/test/resources/onePlayer.txt");
 
         assertThat(players).hasSize(1);
@@ -136,6 +136,14 @@ public class BowlingScoreReaderTest {
         assertThatExceptionOfType(InvalidScoreException.class)
                 .isThrownBy(() -> scoreReader.readScore("src/test/resources/onePlayerInvalidScore.txt"))
                 .withMessage("Invalid sum of pins: 18");
+    }
+
+    @Test
+    @DisplayName("Catch invalid final round on import file")
+    public void catchInvalidFinalRoundOnImportFile() {
+        assertThatExceptionOfType(InvalidThirdValueException.class)
+                .isThrownBy(() -> scoreReader.readScore("src/test/resources/onePlayerInvalidFinalRound.txt"))
+                .withMessage("First and second try sums < 10. Cannot have a third try");
     }
 
     private void assertPlayersPlay(Player actualPlayer, Player expectedPlayer) {

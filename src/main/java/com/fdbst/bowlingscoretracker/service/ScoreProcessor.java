@@ -1,14 +1,12 @@
 package com.fdbst.bowlingscoretracker.service;
 
 import com.fdbst.bowlingscoretracker.exception.*;
-import com.fdbst.bowlingscoretracker.model.Player;
 
 import java.io.FileNotFoundException;
-import java.util.List;
 
-public interface ScoreReader {
+public interface ScoreProcessor {
 
-    List<Player> readScore(String filePath) throws FileNotFoundException, InvalidValueException, InvalidScoreException,
+    String processScore(String filePath) throws FileNotFoundException, InvalidValueException, InvalidScoreException,
             InvalidThirdValueException, NoPlayersException, TooManyRoundsException, NotEnoughRoundsException;
 
 }

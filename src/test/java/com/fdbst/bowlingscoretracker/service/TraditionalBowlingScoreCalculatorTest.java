@@ -44,7 +44,7 @@ public class TraditionalBowlingScoreCalculatorTest {
         fourthRound = new Round(8,1);
         fifthRound = new Round(10,0);
         sixthRound = new Round(10,0);
-        seventhRound = new Round(9,0);
+        seventhRound = new Round(9,-1);
         eighthRound = new Round(7,3);
         ninthRound = new Round(4,4);
         tenthRound = new Round(10,9,0);
@@ -71,7 +71,7 @@ public class TraditionalBowlingScoreCalculatorTest {
     @Test
     @DisplayName("Calculate successfully the player's final score to perfect game")
     public void sucessfulTotalScoreCalculationPerfectGame() {
-        setCornerCaseGames(10, 0);
+        setCornerCaseGame(10, 0);
 
         scoreCalculator.calculateScore(player);
         assertThat(player.getRounds().get(player.getRounds().size() - 1).getAccumulatedScore()).isEqualTo(300);
@@ -80,13 +80,13 @@ public class TraditionalBowlingScoreCalculatorTest {
     @Test
     @DisplayName("Calculate successfully the player's final score to zero game")
     public void sucessfulTotalScoreCalculationZeroGame() {
-        setCornerCaseGames(0, 0);
+        setCornerCaseGame(0, 0);
 
         scoreCalculator.calculateScore(player);
         assertThat(player.getRounds().get(player.getRounds().size() - 1).getAccumulatedScore()).isEqualTo(0);
     }
 
-    private void setCornerCaseGames(int firstTry, int secondTry) {
+    private void setCornerCaseGame(int firstTry, int secondTry) {
         firstRound.setFirstTry(firstTry);
         firstRound.setSecondTry(secondTry);
         secondRound.setFirstTry(firstTry);

@@ -4,6 +4,7 @@ import com.fdbst.bowlingscoretracker.exception.*;
 import com.fdbst.bowlingscoretracker.model.Round;
 import com.fdbst.bowlingscoretracker.model.Player;
 import com.fdbst.bowlingscoretracker.service.ScoreReader;
+import com.fdbst.bowlingscoretracker.utils.PlayUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,11 +17,12 @@ public class BowlingScoreReader implements ScoreReader {
     private static final String FAULT_STRING = "F";
 
     @Override
-    public List<Player> readScore(String filePath) throws FileNotFoundException, InvalidValueException, InvalidScoreException,
-            NoPlayersException, TooManyRoundsException, NotEnoughRoundsException {
+    public List<Player> readScore(String filePath) throws FileNotFoundException, InvalidValueException,
+            InvalidScoreException, InvalidThirdValueException, NoPlayersException, TooManyRoundsException,
+            NotEnoughRoundsException {
         File file = new File(filePath);
         List<Player> players = new ArrayList<>();
-        List<String> playersFinished = new ArrayList<>();
+        List<String> finishedPlayers = new ArrayList<>();
 
         Scanner scanner = new Scanner(file);
         scanner.useDelimiter("\\n");
@@ -40,25 +42,34 @@ public class BowlingScoreReader implements ScoreReader {
                     if (!attempt.equals("F")) {
                         player.getRounds().add(new Round(firstTry, Integer.parseInt(attempt)));
                     } else {
-                        player.getRounds().add(new Round(firstTry, 0));
+                        player.getRounds().add(new Round(firstTry, -1));
                     }
                     if (player.getRounds().size() < NUMBER_OF_ROUNDS) {
-                        int secondTry = Integer.parseInt(attempt);
-                        if ((firstTry + secondTry) > NUMBER_OF_ROUNDS) {
+                        int secondTry = -1;
+                        if (!attempt.equals("F")) {
+                            secondTry = Integer.parseInt(attempt);
+                        }
+                        if ((PlayUtils.normalizePlay(firstTry) + PlayUtils.normalizePlay(secondTry)) > 10) {
                             throw new InvalidScoreException(firstTry + secondTry);
                         }
                         turnCounter = 0;
                     }
                 } else {
-                    if (playersFinished.contains(name)) {
+                    if (finishedPlayers.contains(name)) {
                         throw new TooManyRoundsException();
                     }
+                    Round finalRound = player.getRounds().get(NUMBER_OF_ROUNDS - 1);
+                    int numericAttempt = Integer.parseInt(attempt);
+                    if ((PlayUtils.normalizePlay(finalRound.getFirstTry()) + PlayUtils.normalizePlay(finalRound.getSecondTry()) < 10)
+                            && numericAttempt > 0) {
+                        throw new InvalidThirdValueException();
+                    }
                     if (!attempt.equals(FAULT_STRING)) {
-                        player.getRounds().get(NUMBER_OF_ROUNDS - 1).setThirdTry(Integer.parseInt(attempt));
+                        player.getRounds().get(NUMBER_OF_ROUNDS - 1).setThirdTry(numericAttempt);
                     } else {
                         player.getRounds().get(NUMBER_OF_ROUNDS - 1).setThirdTry(0);
                     }
-                    playersFinished.add(name);
+                    finishedPlayers.add(name);
                     turnCounter = 0;
                 }
             } else {
@@ -71,7 +82,7 @@ public class BowlingScoreReader implements ScoreReader {
                 if (!attempt.equals(FAULT_STRING)) {
                     firstTry = Integer.parseInt(attempt);
                 } else {
-                    firstTry = 0;
+                    firstTry = -1;
                 }
                 if (firstTry == 10 && player.getRounds().size() < (NUMBER_OF_ROUNDS - 1)) {
                     player.getRounds().add(new Round(firstTry, 0));
