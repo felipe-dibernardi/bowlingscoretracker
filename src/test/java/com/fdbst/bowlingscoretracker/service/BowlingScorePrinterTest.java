@@ -50,7 +50,7 @@ public class BowlingScorePrinterTest {
         player2.getRounds().add(new Round(4, 4));
         player2.getRounds().add(new Round(10, 9,0));
 
-        player1Scoreboard = "Frame\t1\t\t2\t\t3\t\t4\t\t5\t\t6\t\t7\t\t8\t\t9\t\t10\t\t\t\n" +
+        player1Scoreboard = "Frame\t\t1\t\t2\t\t3\t\t4\t\t5\t\t6\t\t7\t\t8\t\t9\t\t10\t\t\t\n" +
                 "Jeff\n" +
                 "Pinfalls\t\tX\t7\t/\t9\t0\t\tX\t0\t8\t8\t/\t0\t6\t\tX\t\tX\t8\t1\t0\n" +
                 "Score\t\t0\t\t0\t\t0\t\t0\t\t0\t\t0\t\t0\t\t0\t\t0\t\t0";

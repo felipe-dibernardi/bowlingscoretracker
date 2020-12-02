@@ -26,7 +26,7 @@ public class Application {
             ScorePrinter scorePrinter = new BowlingScorePrinter();
             ScoreProcessor scoreProcessor = new BowlingScoreProcessor(scoreReader, scoreCalculator, scorePrinter);
 
-            scoreProcessor.processScore(args[0]);
+            System.out.println(scoreProcessor.processScore(args[0]));
         } catch (InvalidValueException | InvalidScoreException | InvalidThirdValueException
                 | NoPlayersException | TooManyRoundsException | NotEnoughRoundsException
                 | NoFileException | TooManyFilesException | FileNotFoundException e) {

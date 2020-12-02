@@ -12,7 +12,7 @@ public class BowlingScorePrinter implements ScorePrinter {
     @Override
     public String printScore(List<Player> players) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Frame\t1\t\t2\t\t3\t\t4\t\t5\t\t6\t\t7\t\t8\t\t9\t\t10\t\t\t\n");
+        stringBuilder.append("Frame\t\t1\t\t2\t\t3\t\t4\t\t5\t\t6\t\t7\t\t8\t\t9\t\t10\t\t\t\n");
         players.forEach(player -> {
             stringBuilder.append(player.getName()).append("\n");
             stringBuilder.append("Pinfalls").append("\t");
